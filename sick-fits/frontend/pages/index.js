@@ -1,9 +1,9 @@
 import Items from '../components/Items'
 
-const Sell = props => (
+const Home = props => (
   <div>
     <Items />
   </div>
 )
 
-export default Sell
+export default Home

@@ -37,9 +37,9 @@ export default class Items extends Component {
     return (
       <Center>
         <Query query={ALL_ITEMS_QUERY} >
-          {({data, err, loading}) => {
+          {({data, error, loading}) => {
             if (loading) return <p>Loading...</p>
-            if (err) return <p>Error: {err.message}</p>
+            if (error) return <p>Error: {error.message}</p>
             return (<ItemsList>
               {data.items.map(item => <Item item={item} key={item.id} />)}
             </ItemsList>)

@@ -33,7 +33,7 @@ class Item extends Component {
             <a>Edit {'\u{270F}'}</a>
           </Link>
           <button>add to cart</button>
-          <DeleteItem>Delete</DeleteItem>
+          <DeleteItem id={item.id}>Delete</DeleteItem>
         </div>
       </ItemStyles>
     )
