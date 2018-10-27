@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 import Form from './styles/Form'
 import formatMoney from '../lib/formatMoney'
-import Err from './ErrorMessage'
+import Error from './ErrorMessage'
 
 const SINGLE_ITEM_QUERY = gql`
   query SINGLE_ITEM_QUERY($id: ID!){
@@ -20,19 +20,17 @@ const SINGLE_ITEM_QUERY = gql`
 const UPDATE_ITEM_MUTATION = gql`
 
   mutation UPDATE_ITEM_MUTATION (
-    $title: String!
-    $description: String!
-    $price: Int!
-    $image: String
-    $largeImage: String
+    $id: ID!,
+    $title: String,
+    $description: String,
+    $price: Int
   ) {
-    createItem(
-      title: $title
-      description: $description
+    updateItem(
+      id: $id,
+      title: $title,
+      description: $description,
       price: $price
-      image: $image
-      largeImage: $largeImage
-    ){id}
+    ){id, title, description, price}
   }
 
 
@@ -71,28 +69,34 @@ class UpdateItem extends Component {
     this.setState({image: file.secure_url , largeImage: file.eager[0].secure})
   }
 
+  updateItem = async (e, updateItemMutation) => {
+    e.preventDefault()
+    console.log('updating item!!')
+    console.log(this.state)
+    const res = await updateItemMutation({
+      variables: {
+        id: this.props.id,
+        ...this.state
+      }
+    })
+    console.log('updated!!!')
+  }
+
   render () {
     return (
       <Query query={SINGLE_ITEM_QUERY} variables={{id: this.props.id}}>
         {({data, loading}) => {
 
-          if(loading) return <p>loading... </p>
+          if(loading) return <p> Loading... </p>
+          if(!data.item) return <p> No Item Found </p>
           return(
 
         <Mutation mutation={UPDATE_ITEM_MUTATION} variables={this.state}>
-          {(createItem, {loading, err})=>(
+          {(updateItem, {loading, error})=>(
 
-            <Form onSubmit={async e => {
-              e.preventDefault()
-              const res = await createItem()
-              Router.push({
-                pathname: '/item' ,
-                query: { id: res.data.createItem.id }
-              })
-            
-            }}>
-              <h2>Sell an Item</h2>
-              <Err>{err}</Err>
+            <Form onSubmit={e => this.updateItem(e, updateItem) }>
+              <h2>Edit Item</h2>
+              <Error error={error} />
               <fieldset disabled={loading} aria-busy={loading}>
                 
                 <label htmlFor='title'>
@@ -132,7 +136,7 @@ class UpdateItem extends Component {
                     onChange={this.handleChange}
                   />
                 </label>
-                <button type="submit">Submit</button>
+                <button type="submit">Sav{loading? 'ing' : 'e'}</button>
               </fieldset>
             </Form>
           )}

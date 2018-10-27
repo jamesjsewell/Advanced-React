@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 import Form from './styles/Form'
 import formatMoney from '../lib/formatMoney'
-import Err from './ErrorMessage'
+import Error from './ErrorMessage'
 
 const CREATE_ITEM_MUTATION = gql`
 
@@ -67,7 +67,7 @@ class CreateItem extends Component {
   render () {
     return (
       <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
-        {(createItem, {loading, err, called, data})=>(
+        {(createItem, {loading, error, called, data})=>(
 
           <Form onSubmit={async e => {
             e.preventDefault()
@@ -79,7 +79,7 @@ class CreateItem extends Component {
            
           }}>
             <h2>Sell an Item</h2>
-            <Err>{err}</Err>
+            <Error error={error} />
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor='file'>
                 Image
