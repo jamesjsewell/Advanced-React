@@ -35,10 +35,10 @@ class CreateItem extends Component {
   }
 
   state = {
-    title: 'cool shoes',
-    description: 'these are yeezys',
-    image: 'www.google.com/yeezy.jpg',
-    largeImage: 'www.google.com/largeyeezy.jpg',
+    title: '',
+    description: '',
+    image: '',
+    largeImage: '',
     price: 5000
   }
 
@@ -60,8 +60,8 @@ class CreateItem extends Component {
     })
 
     const file = await res.json()
-
-    this.setState({image: file.secure_url , largeImage: file.eager[0].secure})
+    console.log(file)
+    this.setState({image: file.secure_url , largeImage: file.eager[0].secure_url})
   }
 
   render () {
@@ -72,6 +72,7 @@ class CreateItem extends Component {
           <Form onSubmit={async e => {
             e.preventDefault()
             const res = await createItem()
+            
             Router.push({
               pathname: '/item' ,
               query: { id: res.data.createItem.id }
