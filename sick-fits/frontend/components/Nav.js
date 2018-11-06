@@ -3,35 +3,39 @@ import NavStyles from './styles/NavStyles'
 import User from './User'
 
 const Nav = () => (
-  <NavStyles>
-    <User>
-      {({data: {me} }) => {
-        console.log(me)
-        if(me) return <p>{me.name}</p>
-        return null
-      }}
-    </User>
-    <Link href='/'>
-      <a>Shop</a>
-    </Link>
+  
+  <User>
+    {({data: {me} }) => (
+    <NavStyles>
+      <Link href='/'>
+        <a>Shop</a>
+      </Link>
+      {me && (
+        <>
+        <Link href='/sell'>
+          <a>Sell</a>
+        </Link>
 
-    <Link href='/sell'>
-      <a>Sell</a>
-    </Link>
+        <Link href='/orders'>
+          <a>Orders</a>
+        </Link>
 
-    <Link href='/signup'>
-      <a>Signup</a>
-    </Link>
+        <Link href='/account'>
+          <a>Me</a>
+        </Link>
+        </>
+      )}
+      {!me && (
 
-    <Link href='/orders'>
-      <a>Orders</a>
-    </Link>
+        <Link href='/signup'>
+        <a>Sign In</a>
+        </Link>
 
-    <Link href='/account'>
-      <a>Me</a>
-    </Link>
+      )}
 
-  </NavStyles>
+    </NavStyles>)}
+  </User>
+  
 
 )
 
